@@ -1,8 +1,11 @@
 #include "Game.h"
 #include "Actor.h"
-#include "SDL_image.h"
+#include "Stair.h"
+#include "Player.h"
 #include "SpriteComponent.h"
 #include "BGSpriteComponent.h"
+#include "SDL_image.h"
+#include "Random.h"
 
 Game::Game()
 	:mWindow(nullptr)
@@ -20,7 +23,7 @@ bool Game::Initialize()
 		return false;
 	}
 
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 3)", 100, 100, 1024, 768, 0);
+	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 3)", 100, 100, 768, 768, 0);
 	if (!mWindow)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -39,6 +42,7 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
 		return false;
 	}
+
 
 	LoadData();
 
@@ -86,6 +90,19 @@ void Game::ProcessInput()
 
 void Game::UpdateGame()
 {
+	// Generator stair
+	if (GetStairs().size() < 4 && GetStairs().size() > 0)
+	{
+		if (GetStairs().back()->GetPosition().y < Random::GetIntRange(400, 600))
+		{
+			Stair* stair = new Stair(this);
+			Vector2 pos = stair->GetPosition();
+			pos.x = static_cast<float>(Random::GetIntRange(40, 728));
+			stair->SetPosition(pos);
+		}
+		
+	}
+
 	// Compute delta time
 	// Wait until 16ms has elapsed since last frame
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
@@ -146,18 +163,21 @@ void Game::GenerateOutput()
 
 void Game::LoadData()
 {
+	new Stair(this);
+	new Player(this);
+
 	// Create actor for the background (this doesn't need a subclass)
 	Actor* temp = new Actor(this);
-	temp->SetPosition(Vector2(512.0f, 384.0f));
+	temp->SetPosition(Vector2(384.0f, 384.0f));
 	// Create the "far back" background
 	BGSpriteComponent* bg = new BGSpriteComponent(temp);
-	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+	bg->SetScreenSize(Vector2(768.0f, 768.0f));
 	std::vector<SDL_Texture*> bgtexs = {
 		GetTexture("Assets/bg01.png"),
 		GetTexture("Assets/bg02.png")
 	};
 	bg->SetBGTextures(bgtexs);
-	bg->SetScrollSpeed(-200.0f);
+	bg->SetScrollSpeed(-100.0f);
 }
 
 void Game::UnloadData()
@@ -278,4 +298,19 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 	// (We can't swap because it ruins ordering)
 	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
 	mSprites.erase(iter);
+}
+
+void Game::AddStair(Stair* sta)
+{
+	mStairs.emplace_back(sta);
+}
+
+void Game::RemoveStair(Stair* sta)
+{
+	auto iter = std::find(mStairs.begin(),
+		mStairs.end(), sta);
+	if (iter != mStairs.end())
+	{
+		mStairs.erase(iter);
+	}
 }

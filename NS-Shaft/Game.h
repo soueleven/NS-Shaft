@@ -20,6 +20,11 @@ public:
 	void RemoveSprite(class SpriteComponent* sprite);
 
 	SDL_Texture* GetTexture(const std::string& fileName);
+
+	// Game-specific (add/remove asteroid)
+	void AddStair(class Stair* ast);
+	void RemoveStair(class Stair* ast);
+	std::vector<class Stair*>& GetStairs() { return mStairs; }
 private:
 	void ProcessInput();
 	void UpdateGame();
@@ -44,4 +49,7 @@ private:
 	bool mIsRunning;
 	// Track if we're updating actors right now
 	bool mUpdatingActors;
+
+	// Game-specific
+	std::vector<class Stair*> mStairs;
 };
