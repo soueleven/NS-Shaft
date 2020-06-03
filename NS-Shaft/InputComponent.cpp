@@ -17,6 +17,15 @@ void InputComponent::Update(float deltaTime)
 
 	pos.x += mMoveSpeed * deltaTime;
 	
+	if (pos.x > 768)
+	{
+		pos.x = 0;
+	}
+	if (pos.x < 0)
+	{
+		pos.x = 768;
+	}
+
 	mOwner->SetPosition(pos);
 }
 
