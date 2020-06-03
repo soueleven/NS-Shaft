@@ -15,6 +15,8 @@ public:
 	// Process input for this component
 	virtual void ProcessInput(const uint8_t* keyState) {}
 
+	class Actor* GetOwner() const { return mOwner; }
+
 	int GetUpdateOrder() const { return mUpdateOrder; }
 protected:
 	// Owning actor
