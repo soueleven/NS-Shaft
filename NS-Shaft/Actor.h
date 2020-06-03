@@ -14,6 +14,12 @@ public:
 		EDead
 	};
 
+	enum Direction
+	{
+		EDown,
+		EUp,
+	};
+
 	Actor(class Game* game);
 	virtual ~Actor();
 
@@ -26,16 +32,21 @@ public:
 
 	// ProcessInput function called from Game (not overridable)
 	void ProcessInput(const uint8_t* keyState);
+	// Any actor-specific input code (overridable)
+	virtual void ActorInput(const uint8_t* keyState);
 
 	// Getters/setters
 	const Vector2& GetPosition() const { return mPosition; }
 	void SetPosition(const Vector2& pos) { mPosition = pos; }
+	const Vector2& GetShape() const { return mShape; }
+	void SetShape(const Vector2& pos) { mShape = pos; }
 
 	State GetState() const { return mState; }
 	void SetState(State state) { mState = state; }
+	Direction GetDirection() const { return mDirection; }
+	void SetDirection(Direction direction) { mDirection = direction; }
 
 	class Game* GetGame() { return mGame; }
-
 
 	// Add/remove components
 	void AddComponent(class Component* component);
@@ -46,6 +57,8 @@ private:
 
 	// Transform
 	Vector2 mPosition;
+	Vector2 mShape;
+	Direction mDirection;
 
 	std::vector<class Component*> mComponents;
 	class Game* mGame;

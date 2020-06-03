@@ -3,9 +3,11 @@
 #include "Game.h"
 
 Actor::Actor(Game* game) 
-	:mState(EActive),
-	mPosition(0.0f, 0.0f),
-	mGame(game)
+	:mState(EActive)
+	, mPosition(0.0f, 0.0f)
+	, mShape(0.0f, 0.0f)
+	, mDirection(EUp)
+	, mGame(game)
 {
 	mGame->AddActor(this);
 }
@@ -52,6 +54,12 @@ void Actor::ProcessInput(const uint8_t* keyState)
 			comp->ProcessInput(keyState);
 		}
 	}
+
+	ActorInput(keyState);
+}
+
+void Actor::ActorInput(const uint8_t* keyState)
+{
 }
 
 void Actor::AddComponent(Component* component)
