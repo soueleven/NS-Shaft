@@ -5,7 +5,7 @@
 - Windows 10
 
 ### 実行画面
-![image](app/Assets/screenshot.png)
+![image](https://i.imgur.com/UXM2XgG.png)
 
 ### 遊び方
 - 左(<-)右(->)ボタンを押して、猫を左右移動できます。  
